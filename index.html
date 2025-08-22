@@ -83,7 +83,7 @@
         scene.add(directionalLight);
 
         // Kublarning o'lchami va radius
-        const cubeSize = 1;
+        const cubeSize = 2; // Kublarning o'lchami kattalashtirildi
         const cornerRadius = 0.1; // Qirralar yumaloqligi
 
         // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
@@ -95,21 +95,21 @@
 
         // 1. Pastki kub (ko'k)
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
-        blueCube.position.y = -cubeSize;
+        blueCube.position.y = -cubeSize; // 0 o'rnidan pastga siljitish
         scene.add(blueCube);
         const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         blueCube.add(blueEdges);
 
         // 2. O'rtadagi kub (sariq)
         const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
-        yellowCube.position.y = 0;
+        yellowCube.position.y = 0; // Pastki kubning tepasida
         scene.add(yellowCube);
         const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         yellowCube.add(yellowEdges);
 
         // 3. Ustki kub (qizil)
         const redCube = new THREE.Mesh(geometry, redMaterial);
-        redCube.position.y = cubeSize;
+        redCube.position.y = cubeSize; // O'rtadagi kubning tepasida
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
