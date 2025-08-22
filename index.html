@@ -1,180 +1,180 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>3D Kublar (yumaloq qirralar bilan)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: sans-serif;
-        }
-        canvas {
-            display: block;
-        }
-        #controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-        #resetButton {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-        #resetButton:hover {
-            background-color: #0056b3;
-        }
-        #coordinates {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 100;
-        }
-        #camera-info {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 100;
-        }
-    </style>
+    <title>3D Kublar (yumaloq qirralar bilan)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        #resetButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #resetButton:hover {
+            background-color: #0056b3;
+        }
+        #coordinates {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 100;
+        }
+        #camera-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
-    <div id="controls">
-        <button id="resetButton">Dastlabki holat</button>
-    </div>
-    <div id="coordinates">X: 0, Y: 0</div>
-    <div id="camera-info"></div>
+    <div id="controls">
+        <button id="resetButton">Dastlabki holat</button>
+    </div>
+    <div id="coordinates">X: 0, Y: 0</div>
+    <div id="camera-info"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script>
-        // Asosiy sahna, kamera va rendererni sozlash
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        renderer.setClearColor(0x00ff00, 1); // Yashil fonni belgilash
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Asosiy sahna, kamera va rendererni sozlash
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        renderer.setClearColor(0x00ff00, 1);
 
-        // Yorug'likni qo'shish
-        const ambientLight = new THREE.AmbientLight(0x404040, 2);
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(1, 1, 1).normalize();
-        scene.add(directionalLight);
+        // Yorug'likni qo'shish
+        const ambientLight = new THREE.AmbientLight(0x404040, 2);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(1, 1, 1).normalize();
+        scene.add(directionalLight);
 
-        // Kublarning o'lchami va radius
-        const cubeSize = 2;
-        const cornerRadius = 0.1;
+        // Kublarning o'lchami va radius
+        const cubeSize = 2;
+        const cornerRadius = 0.1;
 
-        // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
-        const geometry = new THREE.RoundedBoxGeometry(cubeSize, cubeSize, cubeSize, cornerRadius, 16);
-        const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
-        const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-        const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+        // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
+        const geometry = new THREE.RoundedBoxGeometry(cubeSize, cubeSize, cubeSize, cornerRadius, 16);
+        const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+        const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+        const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
-        // 1. Pastki kub (ko'k)
-        const blueCube = new THREE.Mesh(geometry, blueMaterial);
-        blueCube.position.y = -cubeSize;
-        scene.add(blueCube);
-        const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
-        blueCube.add(blueEdges);
+        // 1. Pastki kub (ko'k)
+        const blueCube = new THREE.Mesh(geometry, blueMaterial);
+        blueCube.position.y = 0; // Endi y koordinatasi 0 ga o'rnatildi
+        scene.add(blueCube);
+        const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+        blueCube.add(blueEdges);
 
-        // 2. O'rtadagi kub (sariq)
-        const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
-        yellowCube.position.y = 0;
-        scene.add(yellowCube);
-        const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
-        yellowCube.add(yellowEdges);
+        // 2. O'rtadagi kub (sariq)
+        const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
+        yellowCube.position.y = cubeSize; // Oldingi kubning tepasiga
+        scene.add(yellowCube);
+        const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+        yellowCube.add(yellowEdges);
 
-        // 3. Ustki kub (qizil)
-        const redCube = new THREE.Mesh(geometry, redMaterial);
-        redCube.position.y = cubeSize;
-        scene.add(redCube);
-        const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
-        redCube.add(redEdges);
+        // 3. Ustki kub (qizil)
+        const redCube = new THREE.Mesh(geometry, redMaterial);
+        redCube.position.y = cubeSize * 2; // Oldingi kubning tepasiga
+        scene.add(redCube);
+        const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+        redCube.add(redEdges);
 
-        // Kublarni bitta guruhga birlashtirish
-        const cubeGroup = new THREE.Group();
-        cubeGroup.add(blueCube);
-        cubeGroup.add(yellowCube);
-        cubeGroup.add(redCube);
-        scene.add(cubeGroup);
+        // Kublarni bitta guruhga birlashtirish
+        const cubeGroup = new THREE.Group();
+        cubeGroup.add(blueCube);
+        cubeGroup.add(yellowCube);
+        cubeGroup.add(redCube);
+        scene.add(cubeGroup);
 
-        // Kameraning dastlabki joylashuvi
-        const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
-        camera.position.copy(initialCameraPosition);
+        // Kameraning dastlabki joylashuvi
+        const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
+        camera.position.copy(initialCameraPosition);
 
-        // Mobil qurilmalar uchun maxsus kamera sozlamasi
-        if (window.innerWidth < 768) {
-            camera.position.set(-2.5, 2.5, 5);
-        }
+        // Mobil qurilmalar uchun maxsus kamera sozlamasi
+        if (window.innerWidth < 768) {
+            camera.position.set(-2.5, 2.5, 5);
+        }
 
-        // OrbitControls (sichqoncha bilan boshqarish)
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
+        // OrbitControls (sichqoncha bilan boshqarish)
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
 
-        // "Dastlabki holat" tugmasining funksiyasi
-        const resetButton = document.getElementById('resetButton');
-        resetButton.addEventListener('click', () => {
-            controls.reset();
-            if (window.innerWidth < 768) {
-                camera.position.set(-2.5, 2.5, 5);
-            } else {
-                camera.position.copy(initialCameraPosition);
-            }
-            controls.update();
-            cubeGroup.rotation.set(0, 0, 0);
-        });
+        // "Dastlabki holat" tugmasining funksiyasi
+        const resetButton = document.getElementById('resetButton');
+        resetButton.addEventListener('click', () => {
+            controls.reset();
+            if (window.innerWidth < 768) {
+                camera.position.set(-2.5, 2.5, 5);
+            } else {
+                camera.position.copy(initialCameraPosition);
+            }
+            controls.update();
+            cubeGroup.rotation.set(0, 0, 0);
+        });
 
-        // Koordinatalarni va kamera ma'lumotlarini yangilash
-        const coordinatesDiv = document.getElementById('coordinates');
-        const cameraInfoDiv = document.getElementById('camera-info');
+        // Koordinatalarni va kamera ma'lumotlarini yangilash
+        const coordinatesDiv = document.getElementById('coordinates');
+        const cameraInfoDiv = document.getElementById('camera-info');
 
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
 
-            cubeGroup.updateMatrixWorld();
-            const position = new THREE.Vector3();
-            cubeGroup.getWorldPosition(position);
-            coordinatesDiv.textContent = `Shakl: X: ${position.x.toFixed(2)}, Y: ${position.y.toFixed(2)}, Z: ${position.z.toFixed(2)}`;
+            cubeGroup.updateMatrixWorld();
+            const position = new THREE.Vector3();
+            cubeGroup.getWorldPosition(position);
+            coordinatesDiv.textContent = `Shakl: X: ${position.x.toFixed(2)}, Y: ${position.y.toFixed(2)}, Z: ${position.z.toFixed(2)}`;
 
-            const cameraPos = camera.position;
-            cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
+            const cameraPos = camera.position;
+            cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
 
-            renderer.render(scene, camera);
-        }
+            renderer.render(scene, camera);
+        }
 
-        animate();
+        animate();
 
-        // Oyna o'lchami o'zgarganda rendererni yangilash
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+        // Oyna o'lchami o'zgarganda rendererni yangilash
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
