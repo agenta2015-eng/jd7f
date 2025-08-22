@@ -93,19 +93,21 @@
         const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
         const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
-        // Kublarning to'g'ri joylashuvi
+        // 1. Pastki kub (ko'k)
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
         blueCube.position.y = -cubeSize;
         scene.add(blueCube);
         const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         blueCube.add(blueEdges);
 
+        // 2. O'rtadagi kub (sariq)
         const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
         yellowCube.position.y = 0;
         scene.add(yellowCube);
         const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         yellowCube.add(yellowEdges);
 
+        // 3. Ustki kub (qizil)
         const redCube = new THREE.Mesh(geometry, redMaterial);
         redCube.position.y = cubeSize;
         scene.add(redCube);
