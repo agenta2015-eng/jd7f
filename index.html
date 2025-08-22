@@ -3,13 +3,15 @@
 <head>
     <title>3D Kublar (qo'shimchalar bilan)</title>
     <style>
-        body { 
-            margin: 0; 
-            overflow: hidden; 
+        body {
+            margin: 0;
+            overflow: hidden;
             font-family: sans-serif;
             background-color: #00ff00; /* Yashil fon (chromakey uchun) */
         }
-        canvas { display: block; }
+        canvas {
+            display: block;
+        }
         #controls {
             position: absolute;
             top: 20px;
@@ -41,6 +43,17 @@
             font-size: 14px;
             z-index: 100;
         }
+        #camera-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +61,7 @@
         <button id="resetButton">Dastlabki holat</button>
     </div>
     <div id="coordinates">X: 0, Y: 0</div>
+    <div id="camera-info"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -91,7 +105,7 @@
         yellowCube.add(yellowEdges);
 
         // 3. Ustki kub (qizil)
-        const redCube = new THREE.Mesh(geometry, redMaterial); 
+        const redCube = new THREE.Mesh(geometry, redMaterial);
         redCube.position.y = cubeSize;
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
@@ -105,27 +119,28 @@
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
-        // Dastlabki kamera pozitsiyasini saqlash
-        const initialCameraPosition = camera.position.clone();
-        const initialCameraTarget = controls.target.clone();
-
-        // Animatsiya sikli
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
         // "Dastlabki holat" tugmasining funksiyasi
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
             controls.reset();
         });
 
-        // Ekran koordinatalarini yangilash
+        // Ekran koordinatalarini va kamera ma'lumotlarini yangilash
         const coordinatesDiv = document.getElementById('coordinates');
+        const cameraInfoDiv = document.getElementById('camera-info');
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+
+            // Kamera pozitsiyasini yangilash
+            const cameraPos = camera.position;
+            cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
+        }
+
+        animate();
+
         function updateCoordinates(event) {
             coordinatesDiv.textContent = `X: ${event.clientX}, Y: ${event.clientY}`;
         }
