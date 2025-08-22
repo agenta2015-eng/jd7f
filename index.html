@@ -95,21 +95,21 @@
 
         // 1. Pastki kub (ko'k)
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
-        blueCube.position.y = 0; // Endi y koordinatasi 0 ga o'rnatildi
+        blueCube.position.y = -cubeSize; // Bu qator o'zgartirildi
         scene.add(blueCube);
         const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         blueCube.add(blueEdges);
 
         // 2. O'rtadagi kub (sariq)
         const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
-        yellowCube.position.y = cubeSize; // Oldingi kubning tepasiga
+        yellowCube.position.y = 0; // Bu qator o'zgartirildi
         scene.add(yellowCube);
         const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         yellowCube.add(yellowEdges);
 
         // 3. Ustki kub (qizil)
         const redCube = new THREE.Mesh(geometry, redMaterial);
-        redCube.position.y = cubeSize * 2; // Oldingi kubning tepasiga
+        redCube.position.y = cubeSize; // Bu qator o'zgartirildi
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
