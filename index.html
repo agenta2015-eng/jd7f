@@ -14,11 +14,12 @@
             align-items: center;
             height: 100vh;
         }
-        
+
         .container {
             display: flex;
-            flex-direction: column-reverse; /* Kublarni to'g'ri tartibda joylashtirish uchun */
+            flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .cube {
@@ -26,18 +27,24 @@
             height: 100px;
             border: 2px solid black;
             box-sizing: border-box;
+            position: relative;
         }
 
         .red {
             background-color: red;
+            z-index: 3;
+            top: 204px; /* Sariq kub ustida turishi uchun */
         }
 
         .yellow {
             background-color: yellow;
+            z-index: 2;
+            top: 102px; /* Ko'k kub ustida turishi uchun */
         }
 
         .blue {
             background-color: blue;
+            z-index: 1;
         }
     </style>
 </head>
