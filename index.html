@@ -63,8 +63,8 @@
     <div id="coordinates">X: 0, Y: 0</div>
     <div id="camera-info"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
         // Asosiy sahna, kamera va rendererni sozlash
@@ -113,7 +113,7 @@
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
-
+        
         // Kublarni bitta guruhga birlashtirish
         const cubeGroup = new THREE.Group();
         cubeGroup.add(blueCube);
@@ -125,9 +125,9 @@
         const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
         camera.position.copy(initialCameraPosition);
 
-        // Mobil qurilmalar uchun kamera o'lchamlarini sozlash
+        // Mobil qurilmalar uchun maxsus kamera sozlamasi
         if (window.innerWidth < 768) {
-            camera.position.z = 5;
+            camera.position.set(-2.5, 2.5, 5); // Mobil uchun yaxshiroq burchak
         }
 
         // OrbitControls (sichqoncha bilan boshqarish)
@@ -139,6 +139,13 @@
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
             controls.reset();
+            // Mobil uchun dastlabki holatni qaytarish
+            if (window.innerWidth < 768) {
+                camera.position.set(-2.5, 2.5, 5);
+            } else {
+                camera.position.copy(initialCameraPosition);
+            }
+            controls.update();
             cubeGroup.rotation.set(0, 0, 0); // Kublarning aylanishini nolga qaytarish
         });
 
