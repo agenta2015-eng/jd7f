@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>3D Kublar (yumaloq qirralar bilan)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>
         body {
             margin: 0;
@@ -123,6 +124,11 @@
         // Kameraning dastlabki joylashuvi
         const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
         camera.position.copy(initialCameraPosition);
+
+        // Mobil qurilmalar uchun kamera o'lchamlarini sozlash
+        if (window.innerWidth < 768) {
+            camera.position.z = 5;
+        }
 
         // OrbitControls (sichqoncha bilan boshqarish)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
