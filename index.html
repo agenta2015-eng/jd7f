@@ -7,7 +7,6 @@
             margin: 0;
             overflow: hidden;
             font-family: sans-serif;
-            background-color: #00ff00; /* Yashil fon (chromakey uchun) */
         }
         canvas {
             display: block;
@@ -72,6 +71,7 @@
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
+        renderer.setClearColor(0x00ff00, 1); // Orqa fonni yashil qilib belgilaydi
 
         // Yorug'likni qo'shish
         const ambientLight = new THREE.AmbientLight(0x404040, 2);
@@ -110,6 +110,13 @@
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
+        
+        // Kublarni bitta guruhga birlashtirish
+        const cubeGroup = new THREE.Group();
+        cubeGroup.add(blueCube);
+        cubeGroup.add(yellowCube);
+        cubeGroup.add(redCube);
+        scene.add(cubeGroup);
 
         // Kameraning joylashuvi
         camera.position.z = 5;
@@ -125,26 +132,28 @@
             controls.reset();
         });
 
-        // Ekran koordinatalarini va kamera ma'lumotlarini yangilash
+        // Koordinatalarni va kamera ma'lumotlarini yangilash
         const coordinatesDiv = document.getElementById('coordinates');
         const cameraInfoDiv = document.getElementById('camera-info');
 
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
-            renderer.render(scene, camera);
+
+            // Shaklning koordinatalarini yangilash
+            cubeGroup.updateMatrixWorld();
+            const position = new THREE.Vector3();
+            cubeGroup.getWorldPosition(position);
+            coordinatesDiv.textContent = `Shakl: X: ${position.x.toFixed(2)}, Y: ${position.y.toFixed(2)}, Z: ${position.z.toFixed(2)}`;
 
             // Kamera pozitsiyasini yangilash
             const cameraPos = camera.position;
             cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
+
+            renderer.render(scene, camera);
         }
 
         animate();
-
-        function updateCoordinates(event) {
-            coordinatesDiv.textContent = `X: ${event.clientX}, Y: ${event.clientY}`;
-        }
-        window.addEventListener('mousemove', updateCoordinates);
 
         // Oyna o'lchami o'zgarganda rendererni yangilash
         window.addEventListener('resize', () => {
