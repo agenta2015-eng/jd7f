@@ -12,39 +12,32 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100vh; /* Brauzer ekranining butun bo'yi */
         }
-
+        
         .container {
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse; /* Elementlarni teskari tartibda joylashtirish */
             align-items: center;
-            position: relative;
         }
 
         .cube {
             width: 100px;
             height: 100px;
             border: 2px solid black;
-            box-sizing: border-box;
-            position: relative;
+            box-sizing: border-box; /* Chegara o'lchamga kiradi */
         }
 
         .red {
             background-color: red;
-            z-index: 3;
-            top: 204px; /* Sariq kub ustida turishi uchun */
         }
 
         .yellow {
             background-color: yellow;
-            z-index: 2;
-            top: 102px; /* Ko'k kub ustida turishi uchun */
         }
 
         .blue {
             background-color: blue;
-            z-index: 1;
         }
     </style>
 </head>
