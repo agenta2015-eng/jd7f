@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>3D kublar (yangi manzil)</title>
+    <title>3D kublar (tuzatilgan)</title>
     <style>
         body { margin: 0; overflow: hidden; font-family: sans-serif; }
         canvas { display: block; }
@@ -46,7 +46,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
     <script>
         // Асосий саҳна, камера ва рендерерни созлаш
         const scene = new THREE.Scene();
@@ -69,7 +68,8 @@
         const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
         const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-        const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+        const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 }); // TO'G'RI O'ZGARUVCHI NOMI
+
         const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
         // 1. Пастки куб (кўк)
@@ -87,7 +87,7 @@
         yellowCube.add(yellowEdges);
 
         // 3. Устки куб (қизил)
-        const redCube = new THREE.Mesh(geometry, redCubeMaterial);
+        const redCube = new THREE.Mesh(geometry, redMaterial); // TO'G'RI O'ZGARUVCHI ISHLATILDI
         redCube.position.y = cubeSize;
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
