@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>3D Kublar (qo'shimchalar bilan)</title>
+    <title>3D Kublar (yumaloq qirralar bilan)</title>
     <style>
         body {
             margin: 0;
@@ -62,6 +62,7 @@
     <div id="coordinates">X: 0, Y: 0</div>
     <div id="camera-info"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
@@ -80,11 +81,12 @@
         directionalLight.position.set(1, 1, 1).normalize();
         scene.add(directionalLight);
 
-        // Kublarning o'lchami va pozitsiyalari
+        // Kublarning o'lchami va radius
         const cubeSize = 1;
+        const cornerRadius = 0.1; // Qirralar yumaloqligi
 
-        // Kublar geometriyasi va materiallarini yaratish
-        const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
+        const geometry = new THREE.RoundedBoxGeometry(cubeSize, cubeSize, cubeSize, cornerRadius, 16);
         const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
         const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
@@ -110,7 +112,7 @@
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
-        
+
         // Kublarni bitta guruhga birlashtirish
         const cubeGroup = new THREE.Group();
         cubeGroup.add(blueCube);
