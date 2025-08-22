@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>3D Kublar (yumaloq qirralar bilan)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>
         body {
             margin: 0;
@@ -63,8 +62,8 @@
     <div id="coordinates">X: 0, Y: 0</div>
     <div id="camera-info"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
         // Asosiy sahna, kamera va rendererni sozlash
@@ -83,15 +82,15 @@
         scene.add(directionalLight);
 
         // Kublarning o'lchami va radius
-        const cubeSize = 2;
-        const cornerRadius = 0.1;
+        const cubeSize = 1;
+        const cornerRadius = 0.1; // Qirralar yumaloqligi
 
         // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
         const geometry = new THREE.RoundedBoxGeometry(cubeSize, cubeSize, cubeSize, cornerRadius, 16);
         const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
         const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Qora qirralar uchun
 
         // 1. Pastki kub (ko'k)
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
@@ -125,11 +124,6 @@
         const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
         camera.position.copy(initialCameraPosition);
 
-        // Mobil qurilmalar uchun maxsus kamera sozlamasi
-        if (window.innerWidth < 768) {
-            camera.position.set(-2.5, 2.5, 5);
-        }
-
         // OrbitControls (sichqoncha bilan boshqarish)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
@@ -139,13 +133,7 @@
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
             controls.reset();
-            if (window.innerWidth < 768) {
-                camera.position.set(-2.5, 2.5, 5);
-            } else {
-                camera.position.copy(initialCameraPosition);
-            }
-            controls.update();
-            cubeGroup.rotation.set(0, 0, 0);
+            cubeGroup.rotation.set(0, 0, 0); // Kublarning aylanishini nolga qaytarish
         });
 
         // Koordinatalarni va kamera ma'lumotlarini yangilash
@@ -156,11 +144,13 @@
             requestAnimationFrame(animate);
             controls.update();
 
+            // Shaklning koordinatalarini yangilash
             cubeGroup.updateMatrixWorld();
             const position = new THREE.Vector3();
             cubeGroup.getWorldPosition(position);
             coordinatesDiv.textContent = `Shakl: X: ${position.x.toFixed(2)}, Y: ${position.y.toFixed(2)}, Z: ${position.z.toFixed(2)}`;
 
+            // Kamera pozitsiyasini yangilash
             const cameraPos = camera.position;
             cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
 
