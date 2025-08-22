@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>3D kublar (qo'shimchalar bilan)</title>
+    <title>3D Kublar (qo'shimchalar bilan)</title>
     <style>
         body { 
             margin: 0; 
             overflow: hidden; 
             font-family: sans-serif;
-            background-color: #00ff00; /* Yashil fon qo'shildi */
+            background-color: #00ff00; /* Yashil fon (chromakey uchun) */
         }
         canvas { display: block; }
         #controls {
@@ -52,64 +52,64 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
-        // Асосий саҳна, камера ва рендерерни созлаш
+        // Asosiy sahna, kamera va rendererni sozlash
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Ёруғликни қўшиш
+        // Yorug'likni qo'shish
         const ambientLight = new THREE.AmbientLight(0x404040, 2);
         scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(1, 1, 1).normalize();
         scene.add(directionalLight);
 
-        // Кубларнинг ўлчами ва позициялари
+        // Kublarning o'lchami va pozitsiyalari
         const cubeSize = 1;
 
-        // Кублар геометрияси ва материалларини яратиш
+        // Kublar geometriyasi va materiallarini yaratish
         const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
         const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
         const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Қора қирралар учун
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Qora qirralar uchun
 
-        // 1. Пастки куб (кўк)
+        // 1. Pastki kub (ko'k)
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
         blueCube.position.y = -cubeSize;
         scene.add(blueCube);
         const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         blueCube.add(blueEdges);
 
-        // 2. Ўртадаги куб (сариқ)
+        // 2. O'rtadagi kub (sariq)
         const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
         yellowCube.position.y = 0;
         scene.add(yellowCube);
         const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         yellowCube.add(yellowEdges);
 
-        // 3. Устки куб (қизил)
-        const redCube = new THREE.Mesh(geometry, redMaterial); // "redCubeMaterial" o'rniga "redMaterial"
+        // 3. Ustki kub (qizil)
+        const redCube = new THREE.Mesh(geometry, redMaterial); 
         redCube.position.y = cubeSize;
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
 
-        // Камеранинг жойлашуви
+        // Kameraning joylashuvi
         camera.position.z = 5;
 
-        // OrbitControls (сичқонча билан бошқариш)
+        // OrbitControls (sichqoncha bilan boshqarish)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
-        // Дастлабки камера позициясини сақлаш
+        // Dastlabki kamera pozitsiyasini saqlash
         const initialCameraPosition = camera.position.clone();
-        const initialCameraTarget = controls.target.clone(); // Boshlang'ich targetni ham saqlaymiz
+        const initialCameraTarget = controls.target.clone();
 
-        // Анимация цикли
+        // Animatsiya sikli
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -118,20 +118,20 @@
 
         animate();
 
-        // "Dastlabki holat" тугмасининг функцияси
+        // "Dastlabki holat" tugmasining funksiyasi
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
             controls.reset();
         });
 
-        // Экран координаталарини янгилаш
+        // Ekran koordinatalarini yangilash
         const coordinatesDiv = document.getElementById('coordinates');
         function updateCoordinates(event) {
             coordinatesDiv.textContent = `X: ${event.clientX}, Y: ${event.clientY}`;
         }
         window.addEventListener('mousemove', updateCoordinates);
 
-        // Ойна ўлчами ўзгарганда рендерерни янгилаш
+        // Oyna o'lchami o'zgarganda rendererni yangilash
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
