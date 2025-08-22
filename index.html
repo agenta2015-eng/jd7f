@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>3D kublar (oflayn)</title>
+    <title>3D kublar (CDN)</title>
     <style>
         body { margin: 0; overflow: hidden; font-family: sans-serif; }
         canvas { display: block; }
@@ -44,9 +44,18 @@
     </div>
     <div id="coordinates">X: 0, Y: 0</div>
 
-    <script src="three.min.js"></script>
-    <script src="OrbitControls.js"></script>
-    <script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
         // Асосий саҳна, камера ва рендерерни созлаш
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -96,7 +105,7 @@
         camera.position.z = 5;
 
         // OrbitControls (сичқонча билан бошқариш)
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
@@ -112,6 +121,15 @@
             coordinatesDiv.textContent = `X: ${event.clientX}, Y: ${event.clientY}`;
         }
         window.addEventListener('mousemove', updateCoordinates);
+
+        // Анимация цикли
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
 
         // Ойна ўлчами ўзгарганда рендерерни янгилаш
         window.addEventListener('resize', () => {
