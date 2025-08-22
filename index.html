@@ -71,7 +71,7 @@
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-        renderer.setClearColor(0x00ff00, 1); // Orqa fonni yashil qilib belgilaydi
+        renderer.setClearColor(0x00ff00, 1); // Yashil fonni belgilash
 
         // Yorug'likni qo'shish
         const ambientLight = new THREE.AmbientLight(0x404040, 2);
@@ -118,18 +118,24 @@
         cubeGroup.add(redCube);
         scene.add(cubeGroup);
 
-        // Kameraning joylashuvi
-        camera.position.z = 5;
+        // Kameraning dastlabki joylashuvi
+        camera.position.set(-2.9, 1.9, 3.9);
 
         // OrbitControls (sichqoncha bilan boshqarish)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
+        // Dastlabki pozitsiyani saqlash
+        const initialCameraPosition = camera.position.clone();
+        const initialControlsTarget = controls.target.clone();
+
         // "Dastlabki holat" tugmasining funksiyasi
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
-            controls.reset();
+            controls.target.copy(initialControlsTarget);
+            camera.position.copy(initialCameraPosition);
+            controls.update();
         });
 
         // Koordinatalarni va kamera ma'lumotlarini yangilash
