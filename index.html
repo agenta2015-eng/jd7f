@@ -3,7 +3,12 @@
 <head>
     <title>3D kublar (qo'shimchalar bilan)</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: sans-serif; }
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: sans-serif;
+            background-color: #00ff00; /* Yashil fon qo'shildi */
+        }
         canvas { display: block; }
         #controls {
             position: absolute;
@@ -86,7 +91,7 @@
         yellowCube.add(yellowEdges);
 
         // 3. Устки куб (қизил)
-        const redCube = new THREE.Mesh(geometry, redCubeMaterial);
+        const redCube = new THREE.Mesh(geometry, redMaterial); // "redCubeMaterial" o'rniga "redMaterial"
         redCube.position.y = cubeSize;
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
@@ -102,7 +107,7 @@
 
         // Дастлабки камера позициясини сақлаш
         const initialCameraPosition = camera.position.clone();
-        const initialCameraQuaternion = camera.quaternion.clone();
+        const initialCameraTarget = controls.target.clone(); // Boshlang'ich targetni ham saqlaymiz
 
         // Анимация цикли
         function animate() {
