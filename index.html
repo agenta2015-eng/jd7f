@@ -119,23 +119,19 @@
         scene.add(cubeGroup);
 
         // Kameraning dastlabki joylashuvi
-        camera.position.set(-2.9, 1.9, 3.9);
+        const initialCameraPosition = new THREE.Vector3(-2.9, 1.9, 3.9);
+        camera.position.copy(initialCameraPosition);
 
         // OrbitControls (sichqoncha bilan boshqarish)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
-        // Dastlabki pozitsiyani saqlash
-        const initialCameraPosition = camera.position.clone();
-        const initialControlsTarget = controls.target.clone();
-
         // "Dastlabki holat" tugmasining funksiyasi
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
-            controls.target.copy(initialControlsTarget);
-            camera.position.copy(initialCameraPosition);
-            controls.update();
+            controls.reset();
+            cubeGroup.rotation.set(0, 0, 0); // Kublarning aylanishini nolga qaytarish
         });
 
         // Koordinatalarni va kamera ma'lumotlarini yangilash
