@@ -83,37 +83,35 @@
         scene.add(directionalLight);
 
         // Kublarning o'lchami va radius
-        const cubeSize = 2; // Kublarning o'lchami
-        const cornerRadius = 0.1; // Qirralar yumaloqligi
+        const cubeSize = 2;
+        const cornerRadius = 0.1;
 
         // Kublar geometriyasi va materiallarini yaratish (yumaloq qirralar bilan)
         const geometry = new THREE.RoundedBoxGeometry(cubeSize, cubeSize, cubeSize, cornerRadius, 16);
         const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         const yellowMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00 });
         const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Qora qirralar uchun
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
-        // 1. Pastki kub (ko'k)
+        // Kublarning to'g'ri joylashuvi
         const blueCube = new THREE.Mesh(geometry, blueMaterial);
-        blueCube.position.y = -cubeSize; // 0 o'rnidan pastga siljitish
+        blueCube.position.y = -cubeSize;
         scene.add(blueCube);
         const blueEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         blueCube.add(blueEdges);
 
-        // 2. O'rtadagi kub (sariq)
         const yellowCube = new THREE.Mesh(geometry, yellowMaterial);
-        yellowCube.position.y = 0; // Pastki kubning tepasida
+        yellowCube.position.y = 0;
         scene.add(yellowCube);
         const yellowEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         yellowCube.add(yellowEdges);
 
-        // 3. Ustki kub (qizil)
         const redCube = new THREE.Mesh(geometry, redMaterial);
-        redCube.position.y = cubeSize; // O'rtadagi kubning tepasida
+        redCube.position.y = cubeSize;
         scene.add(redCube);
         const redEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
         redCube.add(redEdges);
-        
+
         // Kublarni bitta guruhga birlashtirish
         const cubeGroup = new THREE.Group();
         cubeGroup.add(blueCube);
@@ -127,7 +125,7 @@
 
         // Mobil qurilmalar uchun maxsus kamera sozlamasi
         if (window.innerWidth < 768) {
-            camera.position.set(-2.5, 2.5, 5); // Mobil uchun yaxshiroq burchak
+            camera.position.set(-2.5, 2.5, 5);
         }
 
         // OrbitControls (sichqoncha bilan boshqarish)
@@ -139,14 +137,13 @@
         const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', () => {
             controls.reset();
-            // Mobil uchun dastlabki holatni qaytarish
             if (window.innerWidth < 768) {
                 camera.position.set(-2.5, 2.5, 5);
             } else {
                 camera.position.copy(initialCameraPosition);
             }
             controls.update();
-            cubeGroup.rotation.set(0, 0, 0); // Kublarning aylanishini nolga qaytarish
+            cubeGroup.rotation.set(0, 0, 0);
         });
 
         // Koordinatalarni va kamera ma'lumotlarini yangilash
@@ -157,13 +154,11 @@
             requestAnimationFrame(animate);
             controls.update();
 
-            // Shaklning koordinatalarini yangilash
             cubeGroup.updateMatrixWorld();
             const position = new THREE.Vector3();
             cubeGroup.getWorldPosition(position);
             coordinatesDiv.textContent = `Shakl: X: ${position.x.toFixed(2)}, Y: ${position.y.toFixed(2)}, Z: ${position.z.toFixed(2)}`;
 
-            // Kamera pozitsiyasini yangilash
             const cameraPos = camera.position;
             cameraInfoDiv.textContent = `Kamera: X: ${cameraPos.x.toFixed(2)}, Y: ${cameraPos.y.toFixed(2)}, Z: ${cameraPos.z.toFixed(2)}`;
 
